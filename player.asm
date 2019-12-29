@@ -17,6 +17,7 @@ PLAYER_INC = 1
 .include "skull.asm"
 .include "bomb.asm"
 .include "music.asm"
+.include "soundfx.asm"
 
 SCOREBOARD_X   = 11
 SCOREBOARD_Y   = 1
@@ -415,6 +416,7 @@ eat_pellet: ; Input:
    sty VERA_addr_high
    stz VERA_data0
    stz VERA_data0
+   jsr sfx_play_pellet
    dec pellets
    lda #10
    jsr add_score
@@ -433,6 +435,7 @@ eat_powerpellet:  ; Input:
    sty VERA_addr_high
    stz VERA_data0
    stz VERA_data0
+   jsr sfx_play_pwr_pellet
    dec pellets
    lda #100
    jsr add_score
@@ -474,6 +477,7 @@ eat_key: ; Input:
    stx VERA_addr_low
    sty VERA_addr_high
    stz VERA_data0
+   jsr sfx_play_key_fruit
    inc keys
    lda #200
    jsr add_score
@@ -527,6 +531,7 @@ check_vlock:   ; Input:
    rts
 
 use_key:
+   jsr sfx_play_unlock
    dec keys
    lda #1
    ldx #KEYS_X
@@ -723,6 +728,7 @@ check_collision:
 
 eat_fruit:
    jsr fruit_blink
+   jsr sfx_play_key_fruit
    lda #200       ; Add 500 to score
    jsr add_score
    lda #200
@@ -736,6 +742,7 @@ eat_fruit:
 
 eat_enemy:  ; X: enemy sprite index
    jsr enemy_eaten
+   jsr sfx_play_ghost
    ldx score_mult
 @score:
    lda #200
@@ -821,8 +828,9 @@ player_die:
    jsr fireball_stop
    jsr fruit_stop
    jsr stop_music
+   jsr sfx_play_death
    stz player_index_d
-   SET_TIMER 5, @animation
+   SET_TIMER 10, @animation
    lda player
    ora #$80
    sta player
@@ -837,7 +845,7 @@ player_die:
    ldx #(player_index_d-player_frames_d)
    cpx player_index_d
    beq @animation_done
-   SET_TIMER 3, @animation
+   SET_TIMER 4, @animation
    jmp timer_done
 @animation_done:
    dec lives
@@ -846,7 +854,7 @@ player_die:
    SET_TIMER 30, game_over
    bra @return
 @regenerate:
-   SET_TIMER 30, regenerate
+   SET_TIMER 60, regenerate
 @return:
    jmp timer_done
 
@@ -933,6 +941,7 @@ next_level:
 @update_level:
    SUPERIMPOSE_RESTORE
    jsr clear_bars
+   jsr sfx_play_bars
    jsr fruit_blink
    jsr player_move
    jmp timer_done
@@ -944,6 +953,7 @@ light_bomb:
    jsr enemy_stop
    rts
 @detonated:
+   jsr sfx_play_bomb
    jsr enemy_clear
    jsr skull_clear
    jsr fireball_clear

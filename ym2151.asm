@@ -18,6 +18,7 @@ YM_SN_M1       = $08
 YM_SN_C1       = $10
 YM_SN_M2       = $20
 YM_SN_C2       = $40
+YM_SN_ALL      = YM_SN_M1 | YM_SN_C1 | YM_SN_M2 | YM_SN_C2
 YM_CH_1        = $00
 YM_CH_2        = $01
 YM_CH_3        = $02
@@ -26,7 +27,8 @@ YM_CH_5        = $04
 YM_CH_6        = $05
 YM_CH_7        = $06
 YM_CH_8        = $07
-YM_SN_NOISE    = YM_SN_C2 | YM_CH_8
+YM_NOISE_ON    = YM_SN_C2 | YM_CH_8
+YM_NOISE_OFF   = YM_CH_8
 
 YM_NE_NFRQ     = $0F
 YM_NE          = $80
@@ -91,7 +93,7 @@ YM_KC_OCT5     = $50
 YM_KC_OCT6     = $60
 YM_KC_OCT7     = $70
 YM_KC_C_SH     = $00
-YM_KC_D_FL     = $00
+YM_KC_D_FL     = YM_KC_C_SH
 YM_KC_D        = $01
 YM_KC_D_SH     = $02
 YM_KC_E_FL     = YM_KC_D_SH
@@ -117,7 +119,13 @@ YM_PMS_AMS     = $38
 
 YM_DT1_MUL     = $40
 
-YM_TL          = $60
+YM_TL_M1       = $60
+
+YM_TL_C1       = $68
+
+YM_TL_M2       = $70
+
+YM_TL_C2       = $78
 
 YM_KS_AR       = $80
 
